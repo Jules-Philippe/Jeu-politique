@@ -378,6 +378,14 @@
                 </div>
             </div>
             <div class="question">
+                <p><strong>d)</strong> Rendre l'école obligatoire dès 3 ans et financer des crèches publiques gratuites pour tous, même si cela augmente les dépenses de l'État ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q27" value="1"> ✅ Oui, investir dès le plus jeune âge (+1)</label>
+                    <label class="option"><input type="radio" name="q27" value="-1"> ❌ Non, la petite enfance relève de la famille (-1)</label>
+                    <label class="option"><input type="radio" name="q27" value="0"> ➖ Oui, mais uniquement pour les familles qui en ont besoin (0)</label>
+                </div>
+            </div>
+            <div class="question">
                 <p><strong>b)</strong> Financer massivement l'école publique, même si cela nécessite une baisse des aides à l'école privée (sous contrat) ?</p>
                 <div class="options">
                     <label class="option"><input type="radio" name="q22" value="1"> ✅ Oui, priorité au service public (+1)</label>
@@ -404,6 +412,14 @@
                     <label class="option"><input type="radio" name="q24" value="1"> ✅ Oui, santé = bien public (+1)</label>
                     <label class="option"><input type="radio" name="q24" value="-1"> ❌ Non, l'innovation vient du privé (-1)</label>
                     <label class="option"><input type="radio" name="q24" value="0"> ➖ Contrôle des prix uniquement (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>d)</strong> Augmenter les remboursements de l'Assurance maladie en finançant par une hausse des cotisations ou des impôts ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q28" value="1"> ✅ Oui, la santé passe avant le coût (+1)</label>
+                    <label class="option"><input type="radio" name="q28" value="-1"> ❌ Non, maîtriser d'abord les dépenses (-1)</label>
+                    <label class="option"><input type="radio" name="q28" value="0"> ➖ Oui, mais ciblé sur les soins essentiels (0)</label>
                 </div>
             </div>
             <div class="question">
@@ -498,11 +514,11 @@
                 return;
             }
             const name = document.getElementById('name-input').value.trim() || "Toi";
-            const subject = encodeURIComponent("Mon résultat au test politique : " + currentScore + "/26");
+            const subject = encodeURIComponent("Mon résultat au test politique : " + currentScore + "/28");
             const body = encodeURIComponent(
                 "Bonjour " + name + ",\n\n" +
                 "Voici ton résultat au test politique :\n\n" +
-                "📊 Score : " + currentScore + "/26\n" +
+                "📊 Score : " + currentScore + "/28\n" +
                 "📍 Position : " + currentDescription + "\n" +
                 "🏛️ " + currentParties + "\n\n" +
                 "Refais le test : https://test-politique.netlify.app/\n\n" +
@@ -516,7 +532,7 @@
         function calculateScore() {
             // Vérifie que les 26 questions ont une réponse
             let missing = [];
-            for (let i = 1; i <= 26; i++) {
+            for (let i = 1; i <= 28; i++) {
                 if (!document.querySelector('input[name="q' + i + '"]:checked')) {
                     missing.push(i);
                 }
@@ -527,7 +543,7 @@
             }
 
             let score = 0;
-            const questionNames = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12','q13','q14','q15','q16','q17','q18','q19','q20','q21','q22','q23','q24','q25','q26'];
+            const questionNames = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12','q13','q14','q15','q16','q17','q18','q19','q20','q21','q22','q23','q24','q25','q26','q27','q28'];
             questionNames.forEach(function(q) {
                 score += parseInt(document.querySelector('input[name="' + q + '"]:checked').value);
             });
@@ -542,10 +558,10 @@
             const partyExamples = document.getElementById('party-examples');
             const explanation = document.getElementById('explanation');
 
-            scoreValue.textContent = (score > 0 ? "+" : "") + score + "/26";
+            scoreValue.textContent = (score > 0 ? "+" : "") + score + "/28";
 
             // Barre de score : score [-26, 26] → largeur [0, 100]
-            const percentage = ((score + 26) / 52) * 100;
+            const percentage = ((score + 28) / 56) * 100;
             scoreFill.style.width = percentage + '%';
             scoreFill.style.background = score >= 0 ? '#3498db' : '#e74c3c';
 
@@ -554,15 +570,15 @@
             let parties = "";
             let expl = "";
 
-            if (score >= 20) {
+            if (score >= 21) {
                 description = "Extrême gauche : Tu prônes une rupture radicale avec le système actuel, en faveur d'une société plus égalitaire et écologique.";
                 parties = "Partis proches : Lutte Ouvrière (LO), Nouveau Parti Anticapitaliste (NPA).";
                 expl = "Tu es probablement en faveur d'une transformation profonde de l'économie et de la société, avec une forte critique du capitalisme.";
-            } else if (score >= 13) {
+            } else if (score >= 14) {
                 description = "Gauche radicale : Tes idées rejoignent celles d'une gauche réformiste mais déterminée, avec des positions fortes sur la justice sociale et l'écologie.";
                 parties = "Partis proches : La France Insoumise (LFI), Parti Communiste (PCF).";
                 expl = "Tu soutiens des politiques de redistribution, de protection de l'environnement et de droits sociaux étendus.";
-            } else if (score >= 6) {
+            } else if (score >= 7) {
                 description = "Gauche modérée : Tu es plutôt social-démocrate, en faveur d'un État protecteur mais pragmatique.";
                 parties = "Partis proches : Parti Socialiste (PS), Europe Écologie Les Verts (EELV).";
                 expl = "Tu crois en un équilibre entre marché et intervention publique, avec une attention particulière à l'écologie et aux inégalités.";
@@ -570,11 +586,11 @@
                 description = "Centre : Tu es modéré·e, en faveur de compromis et de solutions pragmatiques.";
                 parties = "Partis proches : Renaissance (ex-LREM), Mouvement Démocrate (Modem).";
                 expl = "Tu privilégies des politiques équilibrées, ni trop à gauche ni trop à droite, avec une ouverture à l'innovation et au dialogue.";
-            } else if (score >= -8) {
+            } else if (score >= -9) {
                 description = "Droite classique : Tu défends des valeurs traditionnelles, la sécurité et une économie libérale encadrée.";
                 parties = "Partis proches : Les Républicains (LR).";
                 expl = "Tu es attaché·e à l'ordre, à la responsabilité individuelle et à une économie de marché, tout en soutenant un État fort sur les questions de sécurité.";
-            } else if (score >= -15) {
+            } else if (score >= -16) {
                 description = "Extrême droite : Tes positions sont souverainistes, avec une forte emphase sur l'identité nationale, la sécurité et le rejet de l'immigration.";
                 parties = "Partis proches : Rassemblement National (RN), Reconquête!";
                 expl = "Tu prônes un État fort, une réduction de l'immigration, et une méfiance envers les institutions européennes et internationales.";
@@ -605,7 +621,7 @@
                 const quiz = document.getElementById('quiz');
                 const reminder = document.createElement('p');
                 reminder.style.cssText = 'background:#eaf4fd;border:1px solid #3498db;border-radius:8px;padding:10px;text-align:center;color:#2c3e50;';
-                reminder.textContent = "👤 Dernier résultat : " + data.name + " — " + data.score + "/26 le " + data.date;
+                reminder.textContent = "👤 Dernier résultat : " + data.name + " — " + data.score + "/28 le " + data.date;
                 quiz.insertBefore(reminder, quiz.firstChild);
                 // Pré-remplit le prénom pour gagner du temps
                 document.getElementById('name-input').value = data.name;
