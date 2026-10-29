@@ -292,7 +292,64 @@
                 </div>
             </div>
         </div>
+        <!-- Éducation -->
+        <div class="category">
+            <h2>6. Éducation</h2>
+            <div class="question">
+                <p><strong>a)</strong> Supprimer les classes prépas et grandes écoles (ENA, Polytechnique) au profit d'un recrutement universitaire unique ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q21" value="1"> ✅ Oui, élitisme injuste (+1)</label>
+                    <label class="option"><input type="radio" name="q21" value="-1"> ❌ Non, excellence nécessaire (-1)</label>
+                    <label class="option"><input type="radio" name="q21" value="0"> ➖ Réformer sans supprimer (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>b)</strong> Financer massivement l'école publique, même si cela nécessite une baisse des aides à l'école privée (sous contrat) ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q22" value="1"> ✅ Oui, priorité au service public (+1)</label>
+                    <label class="option"><input type="radio" name="q22" value="-1"> ❌ Non, liberté de choix éducatif (-1)</label>
+                    <label class="option"><input type="radio" name="q22" value="0"> ➖ Financer les deux selon les besoins (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>c)</strong> Autoriser les établissements à sélectionner leurs élèves dès le collège (filières d'élite dès 11-12 ans) ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q23" value="1"> ❌ Non, égalité des chances (+1)</label>
+                    <label class="option"><input type="radio" name="q23" value="-1"> ✅ Oui, valoriser le mérite tôt (-1)</label>
+                    <label class="option"><input type="radio" name="q23" value="0"> ➖ Seulement dans quelques matières (0)</label>
+                </div>
+            </div>
+        </div>
 
+        <!-- Santé -->
+        <div class="category">
+            <h2>7. Santé</h2>
+            <div class="question">
+                <p><strong>a)</strong> L'État devrait-il contrôler entièrement les laboratoires pharmaceutiques installés en France (prix, production, brevets) ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q24" value="1"> ✅ Oui, santé = bien public (+1)</label>
+                    <label class="option"><input type="radio" name="q24" value="-1"> ❌ Non, l'innovation vient du privé (-1)</label>
+                    <label class="option"><input type="radio" name="q24" value="0"> ➖ Contrôle des prix uniquement (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>b)</strong> Rendre les compléments santé (mutuelles) entièrement gratuits pour tous, financés par l'impôt ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q25" value="1"> ✅ Oui, santé sans reste à charge (+1)</label>
+                    <label class="option"><input type="radio" name="q25" value="-1"> ❌ Non, trop coûteux pour l'État (-1)</label>
+                    <label class="option"><input type="radio" name="q25" value="0"> ➖ Gratuit uniquement pour les ménages modestes (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>c)</strong> Instaurer un numerus clausus ou laisser le marché réguler librement le nombre de médecins et leur installation ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q26" value="1"> ❌ Non, l'État doit planifier les besoins (+1)</label>
+                    <label class="option"><input type="radio" name="q26" value="-1"> ✅ Oui, liberté d'installation (-1)</label>
+                    <label class="option"><input type="radio" name="q26" value="0"> ➖ Incitations financières pour les zones sous-dotées (0)</label>
+                </div>
+            </div>
+        </div>
+        
         <button onclick="calculateScore()">Voir mon résultat !</button>
     </div>
 
@@ -335,6 +392,14 @@
             score += parseInt(document.querySelector('input[name="q18"]:checked')?.value || 0);
             score += parseInt(document.querySelector('input[name="q19"]:checked')?.value || 0);
             score += parseInt(document.querySelector('input[name="q20"]:checked')?.value || 0);
+                        // Éducation et Santé
+            score += parseInt(document.querySelector('input[name="q21"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q22"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q23"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q24"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q25"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q26"]:checked')?.value || 0);
+            
 
             // Afficher le résultat
             document.getElementById('quiz').style.display = 'none';
@@ -345,11 +410,11 @@
             const partyExamples = document.getElementById('party-examples');
             const explanation = document.getElementById('explanation');
 
-            scoreValue.textContent = score + "/20";
+            scoreValue.textContent = score + "/26";
             resultElement.style.display = 'block';
 
             // Calcul du pourcentage pour la barre
-            const percentage = ((score + 20) / 40) * 100; // Convertir le score [-20, 20] en [0, 100]
+            const percentage = ((score + 26) / 52) * 100; // Convertir le score [-20, 20] en [0, 100]
             scoreFill.style.width = percentage + '%';
             scoreFill.style.background = `linear-gradient(90deg, #e74c3c 0%, #e74c3c ${50}%, #3498db ${50}%, #3498db 100%)`;
             if (score >= 0) {
@@ -363,15 +428,15 @@
             let parties = "";
             let expl = "";
 
-            if (score >= 16) {
+            if (score >= 20) {
                 description = "Extrême gauche : Tu prônes une rupture radicale avec le système actuel, en faveur d'une société plus égalitaire et écologique.";
                 parties = "Partis proches : Lutte Ouvrière (LO), Nouveau Parti Anticapitaliste (NPA).";
                 expl = "Tu es probablement en faveur d'une transformation profonde de l'économie et de la société, avec une forte critique du capitalisme.";
-            } else if (score >= 10) {
+            } else if (score >= 13) {
                 description = "Gauche radicale : Tes idées rejoignent celles d'une gauche réformiste mais déterminée, avec des positions fortes sur la justice sociale et l'écologie.";
                 parties = "Partis proches : La France Insoumise (LFI), Parti Communiste (PCF).";
                 expl = "Tu soutiens des politiques de redistribution, de protection de l'environnement et de droits sociaux étendus.";
-            } else if (score >= 5) {
+            } else if (score >= 6) {
                 description = "Gauche modérée : Tu es plutôt social-démocrate, en faveur d'un État protecteur mais pragmatique.";
                 parties = "Partis proches : Parti Socialiste (PS), Europe Écologie Les Verts (EELV).";
                 expl = "Tu crois en un équilibre entre marché et intervention publique, avec une attention particulière à l'écologie et aux inégalités.";
@@ -379,11 +444,11 @@
                 description = "Centre : Tu es modéré·e, en faveur de compromis et de solutions pragmatiques.";
                 parties = "Partis proches : Renaissance (ex-LREM), Mouvement Démocrate (Modem).";
                 expl = "Tu privilégies des politiques équilibrées, ni trop à gauche ni trop à droite, avec une ouverture à l'innovation et au dialogue.";
-            } else if (score >= -6) {
+            } else if (score >= -8) {
                 description = "Droite classique : Tu défends des valeurs traditionnelles, la sécurité et une économie libérale encadrée.";
                 parties = "Partis proches : Les Républicains (LR).";
                 expl = "Tu es attaché·e à l'ordre, à la responsabilité individuelle et à une économie de marché, tout en soutenant un État fort sur les questions de sécurité.";
-            } else if (score >= -12) {
+            } else if (score >= -15) {
                 description = "Extrême droite : Tes positions sont souverainistes, avec une forte emphase sur l'identité nationale, la sécurité et le rejet de l'immigration.";
                 parties = "Partis proches : Rassemblement National (RN), Reconquête!";
                 expl = "Tu prônes un État fort, une réduction de l'immigration, et une méfiance envers les institutions européennes et internationales.";
