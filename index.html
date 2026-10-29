@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu : Où te situes-tu sur l'échiquier politique ?</title>
+    <title>Jeu : Où es-tu sur l'échiquier politique ?</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -166,6 +166,50 @@
             color: #27ae60;
             min-height: 24px;
         }
+                .share-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .share-btn {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+            margin: 0;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        .share-btn:hover {
+            background-color: #7d3c98;
+        }
+        .qr-container {
+            display: none;
+            background: white;
+            border: 2px dashed #8e44ad;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 300px;
+            text-align: center;
+        }
+        .qr-container img {
+            width: 200px;
+            height: 200px;
+            display: block;
+            margin: 0 auto 10px;
+            background: white;
+        }
+        .qr-hint {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin: 0;
+        }
         @media (max-width: 600px) {
             .options {
                 gap: 5px;
@@ -177,8 +221,8 @@
     </style>
 </head>
 <body>
-    <h1>🎮 Où te situes-tu sur l'échiquier politique ?</h1>
-    <p>Réponds à ces questions pour découvrir ta position politique ! À la fin, tu obtiendras ton score et une analyse détaillée.</p>
+    <h1>🎮 Où te situes-tu sur l'échiquier politique ? 🎮</h1>
+    <p>Réponds à ces questions pour découvrir ta position politique ! À la fin, tu obtiendras ton score, une analyse et tu auras la possibilité d'enregistrer ou t'envoyer ton score par mail </p>
 
     <div id="quiz">
         <!-- Économie et fiscalité -->
@@ -476,6 +520,18 @@
 
         <div id="status-message"></div>
 
+        <!-- Partage du jeu -->
+        <div class="share-buttons">
+            <button class="share-btn" onclick="shareGame()">🔗 Partager le jeu</button>
+            <button class="share-btn" onclick="toggleQRCode()">📱 Afficher le QR code</button>
+        </div>
+
+        <!-- QR code (caché par défaut) -->
+        <div id="qr-code-container" class="qr-container">
+            <img id="qr-code-img" alt="QR code du jeu" title="Scanne pour jouer !">
+            <p class="qr-hint">📸 Fais scanner ce QR code à tes amis pour qu'ils jouent !</p>
+        </div>
+
         <button onclick="window.location.reload()">Recommencer</button>
     </div>
 
@@ -504,7 +560,53 @@
             status.style.color = '#27ae60';
             status.textContent = "✅ Score enregistré pour " + name + " !";
         }
+        
+        function shareGame() {
+            const url = "https://jeu-de-determination-politique.netlify.app/";
+            const shareText = "🎮 J'ai fait ce test pour savoir où je me situe sur l'échiquier politique ! Essaie aussi : " + url;
+            const status = document.getElementById('status-message');
 
+            // 1. Si le navigateur supporte le partage natif (mobile surtout)
+            if (navigator.share) {
+                navigator.share({
+                    title: "Test Politique",
+                    text: shareText,
+                    url: url
+                }).then(function() {
+                    status.style.color = '#27ae60';
+                    status.textContent = "✅ Merci pour le partage !";
+                }).catch(function() {
+                    // L'utilisateur a annulé : on ne fait rien
+                });
+            } else {
+                // 2. Sinon : copie du lien dans le presse-papier
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(shareText).then(function() {
+                        status.style.color = '#27ae60';
+                        status.textContent = "📋 Lien copié ! Colle-le où tu veux 🎉";
+                    });
+                } else {
+                    // 3. Dernier recours : sélection manuelle
+                    prompt("Copie ce lien pour partager le jeu :", shareText);
+                }
+            }
+        }
+
+        function toggleQRCode() {
+            const container = document.getElementById('qr-code-container');
+            const img = document.getElementById('qr-code-img');
+            const status = document.getElementById('status-message');
+
+            if (container.style.display === 'none' || container.style.display === '') {
+                // Génère le QR code via un service gratuit (api.qrserver.com)
+                if (!img.src) {
+                    img.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent("https://jeu-de-determination-politique.netlify.app/");
+                }
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        }
         function sendByEmail() {
             const email = document.getElementById('email-input').value.trim();
             const status = document.getElementById('status-message');
@@ -521,7 +623,7 @@
                 "📊 Score : " + currentScore + "/28\n" +
                 "📍 Position : " + currentDescription + "\n" +
                 "🏛️ " + currentParties + "\n\n" +
-                "Refais le test : https://test-politique.netlify.app/\n\n" +
+                "Refais le test : https://jeu-de-determination-politique.netlify.app/\n\n" +
                 "À bientôt !"
             );
             window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + body;
