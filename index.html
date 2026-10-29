@@ -80,7 +80,7 @@
         }
         .score-fill {
             height: 100%;
-            background: linear-gradient(90deg, #e74c3c, #3498db);
+            background-color: #3498db;
             width: 50%;
             transition: width 0.5s, background 0.5s;
         }
@@ -93,7 +93,7 @@
             font-weight: bold;
             margin-top: 10px;
         }
-                .share-card {
+        .share-card {
             background: linear-gradient(135deg, #2c3e50, #3498db);
             color: white;
             border-radius: 15px;
@@ -365,6 +365,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Éducation -->
         <div class="category">
             <h2>6. Éducation</h2>
@@ -422,7 +423,7 @@
                 </div>
             </div>
         </div>
-        
+
         <button onclick="calculateScore()">Voir mon résultat !</button>
     </div>
 
@@ -436,7 +437,7 @@
         <div class="share-card" id="share-card">
             <div class="share-card-header">🎮 Test Politique 🎮</div>
             <div class="share-card-name" id="card-name">Ton prénom</div>
-            <div class="share-card-score" id="card-score">+0</div>
+            <div class="share-card-score" id="card-score">0</div>
             <div class="share-card-position" id="card-position">Centre</div>
             <div class="share-card-footer">Test-politique.netlify.app</div>
         </div>
@@ -467,8 +468,6 @@
         let currentDescription = "";
         let currentParties = "";
 
-        // Variables globales remplies par calculateScore()
-
         function saveName() {
             const name = document.getElementById('name-input').value.trim();
             const status = document.getElementById('status-message');
@@ -477,10 +476,8 @@
                 status.textContent = "⚠️ Entre ton prénom d'abord !";
                 return;
             }
-            // Met à jour l'affichage
             document.getElementById('player-name').textContent = name;
             document.getElementById('card-name').textContent = name;
-            // Sauvegarde dans le navigateur (persiste après fermeture)
             localStorage.setItem('politique-last-result', JSON.stringify({
                 name: name,
                 score: currentScore,
@@ -511,66 +508,44 @@
                 "Refais le test : https://test-politique.netlify.app/\n\n" +
                 "À bientôt !"
             );
-            // Ouvre le logiciel de messagerie avec un email pré-rempli
             window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + body;
             status.style.color = '#27ae60';
             status.textContent = "📧 Email préparé pour " + email + " — clique sur Envoyer !";
         }
+
         function calculateScore() {
+            // Vérifie que les 26 questions ont une réponse
+            let missing = [];
+            for (let i = 1; i <= 26; i++) {
+                if (!document.querySelector('input[name="q' + i + '"]:checked')) {
+                    missing.push(i);
+                }
+            }
+            if (missing.length > 0) {
+                alert("⚠️ Il te manque " + missing.length + " réponse(s) : questions " + missing.join(", ") + ".\nLes questions sans réponse ne comptent pas — réponds à tout pour un score juste !");
+                return;
+            }
+
             let score = 0;
-            // Économie et fiscalité
-            score += parseInt(document.querySelector('input[name="q1"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q2"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q3"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q4"]:checked')?.value || 0);
-            // Société et valeurs
-            score += parseInt(document.querySelector('input[name="q5"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q6"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q7"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q8"]:checked')?.value || 0);
-            // Sécurité et justice
-            score += parseInt(document.querySelector('input[name="q9"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q10"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q11"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q12"]:checked')?.value || 0);
-            // Europe et international
-            score += parseInt(document.querySelector('input[name="q13"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q14"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q15"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q16"]:checked')?.value || 0);
-            // Environnement et technologie
-            score += parseInt(document.querySelector('input[name="q17"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q18"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q19"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q20"]:checked')?.value || 0);
-                        // Éducation et Santé
-            score += parseInt(document.querySelector('input[name="q21"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q22"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q23"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q24"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q25"]:checked')?.value || 0);
-            score += parseInt(document.querySelector('input[name="q26"]:checked')?.value || 0);
-            
+            const questionNames = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12','q13','q14','q15','q16','q17','q18','q19','q20','q21','q22','q23','q24','q25','q26'];
+            questionNames.forEach(function(q) {
+                score += parseInt(document.querySelector('input[name="' + q + '"]:checked').value);
+            });
+
             // Afficher le résultat
             document.getElementById('quiz').style.display = 'none';
-            const resultElement = document.getElementById('result');
             const scoreValue = document.getElementById('score-value');
             const scoreFill = document.getElementById('score-fill');
             const scoreDescription = document.getElementById('score-description');
             const partyExamples = document.getElementById('party-examples');
             const explanation = document.getElementById('explanation');
 
-            scoreValue.textContent = score + "/26";
+            scoreValue.textContent = (score > 0 ? "+" : "") + score + "/26";
 
-            // Calcul du pourcentage pour la barre
-            const percentage = ((score + 26) / 52) * 100; // Convertir le score [-20, 20] en [0, 100]
+            // Barre de score : score [-26, 26] → largeur [0, 100]
+            const percentage = ((score + 26) / 52) * 100;
             scoreFill.style.width = percentage + '%';
-            scoreFill.style.background = `linear-gradient(90deg, #e74c3c 0%, #e74c3c ${50}%, #3498db ${50}%, #3498db 100%)`;
-            if (score >= 0) {
-                scoreFill.style.background = `linear-gradient(90deg, #e74c3c 0%, #e74c3c ${50}%, #3498db ${50}%, #3498db 100%)`;
-            } else {
-                scoreFill.style.background = `linear-gradient(90deg, #3498db 0%, #3498db ${50 + (score/40)*100}%, #e74c3c ${50 + (score/40)*100}%, #e74c3c 100%)`;
-            }
+            scoreFill.style.background = score >= 0 ? '#3498db' : '#e74c3c';
 
             // Description du résultat
             let description = "";
@@ -616,16 +591,22 @@
             currentDescription = description;
             currentParties = parties;
             document.getElementById('card-score').textContent = (score > 0 ? "+" : "") + score;
-            document.getElementById('card-position').textContent = description.split(" :")[0];        
+            document.getElementById('card-position').textContent = description.split(" :")[0];
         }
-        
+
         // Restaure le dernier résultat enregistré au chargement de la page
         window.onload = function() {
             const saved = localStorage.getItem('politique-last-result');
             if (saved) {
                 const data = JSON.parse(saved);
-                const status = document.getElementById('status-message');
-                status.textContent = "👤 Dernier résultat : " + data.name + " (" + data.score + "/26) le " + data.date;
+                // Affiche le rappel au-dessus du quiz (zone visible)
+                const quiz = document.getElementById('quiz');
+                const reminder = document.createElement('p');
+                reminder.style.cssText = 'background:#eaf4fd;border:1px solid #3498db;border-radius:8px;padding:10px;text-align:center;color:#2c3e50;';
+                reminder.textContent = "👤 Dernier résultat : " + data.name + " — " + data.score + "/26 le " + data.date;
+                quiz.insertBefore(reminder, quiz.firstChild);
+                // Pré-remplit le prénom pour gagner du temps
+                document.getElementById('name-input').value = data.name;
             }
         };
     </script>
