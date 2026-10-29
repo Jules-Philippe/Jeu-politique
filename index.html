@@ -93,6 +93,79 @@
             font-weight: bold;
             margin-top: 10px;
         }
+                .share-card {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            margin: 20px auto;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .share-card-header {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+        .share-card-name {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .share-card-score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .share-card-position {
+            font-size: 20px;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 10px 0;
+        }
+        .share-card-footer {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 15px;
+        }
+        .save-section, .email-section {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .save-section input, .email-section input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            flex: 1;
+            max-width: 250px;
+        }
+        .small-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0;
+            display: inline-block;
+        }
+        .small-btn:hover {
+            background-color: #219652;
+        }
+        #status-message {
+            text-align: center;
+            font-weight: bold;
+            color: #27ae60;
+            min-height: 24px;
+        }
         @media (max-width: 600px) {
             .options {
                 gap: 5px;
@@ -354,17 +427,95 @@
     </div>
 
     <div id="result">
-        <h2>Ton résultat : <span id="score-value"></span></h2>
+        <h2>Résultat de <span id="player-name">ton test</span> : <span id="score-value"></span></h2>
         <div class="score-bar">
             <div class="score-fill" id="score-fill"></div>
         </div>
+
+        <!-- Vignette de partage -->
+        <div class="share-card" id="share-card">
+            <div class="share-card-header">🎮 Test Politique 🎮</div>
+            <div class="share-card-name" id="card-name">Ton prénom</div>
+            <div class="share-card-score" id="card-score">+0</div>
+            <div class="share-card-position" id="card-position">Centre</div>
+            <div class="share-card-footer">Test-politique.netlify.app</div>
+        </div>
+
         <p id="score-description"></p>
         <p class="party-examples" id="party-examples"></p>
         <p class="explanation" id="explanation"></p>
+
+        <!-- Enregistrement du prénom -->
+        <div class="save-section">
+            <input type="text" id="name-input" placeholder="Ton prénom" maxlength="30">
+            <button class="small-btn" onclick="saveName()">Enregistrer mon score</button>
+        </div>
+
+        <!-- Envoi par email -->
+        <div class="email-section">
+            <input type="email" id="email-input" placeholder="Ton adresse email">
+            <button class="small-btn" onclick="sendByEmail()">Recevoir mon score par email</button>
+        </div>
+
+        <div id="status-message"></div>
+
         <button onclick="window.location.reload()">Recommencer</button>
     </div>
 
     <script>
+        let currentScore = 0;
+        let currentDescription = "";
+        let currentParties = "";
+
+        // Variables globales remplies par calculateScore()
+
+        function saveName() {
+            const name = document.getElementById('name-input').value.trim();
+            const status = document.getElementById('status-message');
+            if (!name) {
+                status.style.color = '#e74c3c';
+                status.textContent = "⚠️ Entre ton prénom d'abord !";
+                return;
+            }
+            // Met à jour l'affichage
+            document.getElementById('player-name').textContent = name;
+            document.getElementById('card-name').textContent = name;
+            // Sauvegarde dans le navigateur (persiste après fermeture)
+            localStorage.setItem('politique-last-result', JSON.stringify({
+                name: name,
+                score: currentScore,
+                description: currentDescription,
+                parties: currentParties,
+                date: new Date().toLocaleDateString('fr-FR')
+            }));
+            status.style.color = '#27ae60';
+            status.textContent = "✅ Score enregistré pour " + name + " !";
+        }
+
+        function sendByEmail() {
+            const email = document.getElementById('email-input').value.trim();
+            const status = document.getElementById('status-message');
+            if (!email || !email.includes('@')) {
+                status.style.color = '#e74c3c';
+                status.textContent = "⚠️ Entre une adresse email valide !";
+                return;
+            }
+            const name = document.getElementById('name-input').value.trim() || "Toi";
+            const subject = encodeURIComponent("Mon résultat au test politique : " + currentScore + "/26");
+            const body = encodeURIComponent(
+                "Bonjour " + name + ",\n\n" +
+                "Voici ton résultat au test politique :\n\n" +
+                "📊 Score : " + currentScore + "/26\n" +
+                "📍 Position : " + currentDescription + "\n" +
+                "🏛️ " + currentParties + "\n\n" +
+                "Refais le test : https://test-politique.netlify.app/\n\n" +
+                "À bientôt !"
+            );
+            // Ouvre le logiciel de messagerie avec un email pré-rempli
+            window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + body;
+            status.style.color = '#27ae60';
+            status.textContent = "📧 Email préparé pour " + email + " — clique sur Envoyer !";
+        }
         function calculateScore() {
             let score = 0;
             // Économie et fiscalité
@@ -409,9 +560,6 @@
             const scoreDescription = document.getElementById('score-description');
             const partyExamples = document.getElementById('party-examples');
             const explanation = document.getElementById('explanation');
-
-            scoreValue.textContent = score + "/26";
-            resultElement.style.display = 'block';
 
             // Calcul du pourcentage pour la barre
             const percentage = ((score + 26) / 52) * 100; // Convertir le score [-20, 20] en [0, 100]
@@ -461,7 +609,24 @@
             scoreDescription.textContent = description;
             partyExamples.textContent = parties;
             explanation.textContent = expl;
+
+            // Stockage pour la sauvegarde, l'email et la vignette
+            currentScore = score;
+            currentDescription = description;
+            currentParties = parties;
+            document.getElementById('card-score').textContent = (score > 0 ? "+" : "") + score;
+            document.getElementById('card-position').textContent = description.split(" :")[0];        
         }
+        
+        // Restaure le dernier résultat enregistré au chargement de la page
+        window.onload = function() {
+            const saved = localStorage.getItem('politique-last-result');
+            if (saved) {
+                const data = JSON.parse(saved);
+                const status = document.getElementById('status-message');
+                status.textContent = "👤 Dernier résultat : " + data.name + " (" + data.score + "/26) le " + data.date;
+            }
+        };
     </script>
 </body>
 </html>
