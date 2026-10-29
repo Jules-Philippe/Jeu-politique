@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu : Où te situes-tu sur l'échiquier politique ?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .category {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .category h2 {
+            color: #3498db;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 30px auto;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 20px;
+        }
+        .score-bar {
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #3498db);
+            width: 50%;
+            transition: width 0.5s, background 0.5s;
+        }
+        .explanation {
+            font-style: italic;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+        .party-examples {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            .options {
+                gap: 5px;
+            }
+            .option {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Où te situes-tu sur l'échiquier politique ?</h1>
+    <p>Réponds à ces questions pour découvrir ta position politique ! À la fin, tu obtiendras ton score et une analyse détaillée.</p>
+
+    <div id="quiz">
+        <!-- Économie et fiscalité -->
+        <div class="category">
+            <h2>1. Économie et fiscalité</h2>
+            <div class="question">
+                <p><strong>a)</strong> Augmenter les impôts des plus riches pour financer les services publics, même si cela décourage l'investissement ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q1" value="1"> ✅ Oui (+1)</label>
+                    <label class="option"><input type="radio" name="q1" value="-1"> ❌ Non (-1)</label>
+                    <label class="option"><input type="radio" name="q1" value="0"> ➖ Seulement en cas de crise (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>b)</strong> Indexer le SMIC sur l'inflation automatiquement, même si cela augmente les coûts pour les petites entreprises ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q2" value="1"> ✅ Oui (+1)</label>
+                    <label class="option"><input type="radio" name="q2" value="-1"> ❌ Non (-1)</label>
+                    <label class="option"><input type="radio" name="q2" value="0"> ➖ Oui, mais avec des aides pour les PME (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>c)</strong> Nationaliser partiellement les grandes entreprises (CAC 40) pour mieux contrôler leur impact social et environnemental ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q3" value="1"> ✅ Oui (+1)</label>
+                    <label class="option"><input type="radio" name="q3" value="-1"> ❌ Non (-1)</label>
+                    <label class="option"><input type="radio" name="q3" value="0"> ➖ Seulement dans les secteurs stratégiques (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>d)</strong> Instaurer un revenu universel d'existence, même si cela augmente fortement les dépenses publiques ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q4" value="1"> ✅ Oui (+1)</label>
+                    <label class="option"><input type="radio" name="q4" value="-1"> ❌ Non (-1)</label>
+                    <label class="option"><input type="radio" name="q4" value="0"> ➖ Oui, mais sous conditions de ressources (0)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Société et valeurs -->
+        <div class="category">
+            <h2>2. Société et valeurs</h2>
+            <div class="question">
+                <p><strong>a)</strong> Renforcer la laïcité en interdisant les signes religieux ostentatoires dans tous les espaces publics ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q5" value="1"> ❌ Non, atteinte aux libertés (+1)</label>
+                    <label class="option"><input type="radio" name="q5" value="-1"> ✅ Oui, neutralité de l'espace public (-1)</label>
+                    <label class="option"><input type="radio" name="q5" value="0"> ➖ Seulement dans les lieux symboliques (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>b)</strong> Légaliser l'euthanasie et le suicide assisté sans restriction pour les personnes en souffrance ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q6" value="1"> ✅ Oui, liberté individuelle (+1)</label>
+                    <label class="option"><input type="radio" name="q6" value="-1"> ❌ Non, risque d'abus (-1)</label>
+                    <label class="option"><input type="radio" name="q6" value="0"> ➖ Oui, mais sous contrôle médical strict (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>c)</strong> Instaurer des quotas de diversité (genre, origine) dans les entreprises et les institutions publiques ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q7" value="1"> ✅ Oui, égalité (+1)</label>
+                    <label class="option"><input type="radio" name="q7" value="-1"> ❌ Non, injustice (-1)</label>
+                    <label class="option"><input type="radio" name="q7" value="0"> ➖ Oui, mais temporairement (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>d)</strong> Autoriser la gestation pour autrui (GPA) en France, sous encadrement strict ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q8" value="1"> ✅ Oui, droit à la parentalité (+1)</label>
+                    <label class="option"><input type="radio" name="q8" value="-1"> ❌ Non, risque d'exploitation (-1)</label>
+                    <label class="option"><input type="radio" name="q8" value="0"> ➖ Oui, mais uniquement pour les couples infertiles (0)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sécurité et justice -->
+        <div class="category">
+            <h2>3. Sécurité et justice</h2>
+            <div class="question">
+                <p><strong>a)</strong> Alourdir systématiquement les peines de prison pour les crimes violents, même si cela augmente la surpopulation carcérale ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q9" value="1"> ❌ Non, réinsertion prioritaire (+1)</label>
+                    <label class="option"><input type="radio" name="q9" value="-1"> ✅ Oui, dissuasion (-1)</label>
+                    <label class="option"><input type="radio" name="q9" value="0"> ➖ Cela dépend du crime (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>b)</strong> Donner plus de pouvoirs à la police pour fouiller ou contrôler les individus dans les quartiers sensibles, même sans suspicion précise ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q10" value="1"> ❌ Non, stigmatisation (+1)</label>
+                    <label class="option"><input type="radio" name="q10" value="-1"> ✅ Oui, lutte contre l'insécurité (-1)</label>
+                    <label class="option"><input type="radio" name="q10" value="0"> ➖ Seulement en cas d'état d'urgence (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>c)</strong> Rétablir la peine de mort pour les crimes les plus graves (terrorisme, meurtres d'enfants) ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q11" value="1"> ❌ Non, barbare (+1)</label>
+                    <label class="option"><input type="radio" name="q11" value="-1"> ✅ Oui, justice des victimes (-1)</label>
+                    <label class="option"><input type="radio" name="q11" value="0"> ➖ Un référendum devrait trancher (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>d)</strong> Supprimer les peines de prison pour les délits liés à la consommation de drogues (cannabis, etc.) ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q12" value="1"> ✅ Oui, dépénalisation (+1)</label>
+                    <label class="option"><input type="radio" name="q12" value="-1"> ❌ Non, effet d'appel (-1)</label>
+                    <label class="option"><input type="radio" name="q12" value="0"> ➖ Oui, mais avec des amendes ou des stages (0)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Europe et international -->
+        <div class="category">
+            <h2>4. Europe et international</h2>
+            <div class="question">
+                <p><strong>a)</strong> La France devrait-elle quitter l'UE si elle impose des politiques contraires à ses intérêts ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q13" value="1"> ❌ Non, UE indispensable (+1)</label>
+                    <label class="option"><input type="radio" name="q13" value="-1"> ✅ Oui, souveraineté nationale (-1)</label>
+                    <label class="option"><input type="radio" name="q13" value="0"> ➖ Seulement si un référendum le décide (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>b)</strong> Réduire drastiquement l'aide au développement pour prioriser les dépenses sociales en France ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q14" value="1"> ❌ Non, devoir moral (+1)</label>
+                    <label class="option"><input type="radio" name="q14" value="-1"> ✅ Oui, "charité commence à la maison" (-1)</label>
+                    <label class="option"><input type="radio" name="q14" value="0"> ➖ Réorienter l'aide vers des projets contrôlés (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>c)</strong> L'immigration devrait-elle être limitée à un quota annuel strict, même si cela pénalise des secteurs en manque de main-d'œuvre ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q15" value="1"> ❌ Non, nécessaire économiquement (+1)</label>
+                    <label class="option"><input type="radio" name="q15" value="-1"> ✅ Oui, préserver l'identité (-1)</label>
+                    <label class="option"><input type="radio" name="q15" value="0"> ➖ Prioriser l'immigration qualifiée et légale (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>d)</strong> Accueillir automatiquement les réfugiés climatiques dans les années à venir ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q16" value="1"> ✅ Oui, solidarité internationale (+1)</label>
+                    <label class="option"><input type="radio" name="q16" value="-1"> ❌ Non, risque de saturation (-1)</label>
+                    <label class="option"><input type="radio" name="q16" value="0"> ➖ Oui, mais avec des limites et un partage européen (0)</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environnement et technologie -->
+        <div class="category">
+            <h2>5. Environnement et technologie</h2>
+            <div class="question">
+                <p><strong>a)</strong> Interdire la vente de véhicules thermiques dès 2030, même si cela pénalise les ménages ruraux ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q17" value="1"> ✅ Oui, urgence écologique (+1)</label>
+                    <label class="option"><input type="radio" name="q17" value="-1"> ❌ Non, transition trop brutale (-1)</label>
+                    <label class="option"><input type="radio" name="q17" value="0"> ➖ Oui, mais avec des alternatives abordables (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>b)</strong> Encourager les OGM et les nouvelles technologies agricoles, même au risque de dépendre des multinationales ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q18" value="1"> ❌ Non, bio et local (+1)</label>
+                    <label class="option"><input type="radio" name="q18" value="-1"> ✅ Oui, innovation indispensable (-1)</label>
+                    <label class="option"><input type="radio" name="q18" value="0"> ➖ Sous contrôle strict de l'État (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>c)</strong> Investir massivement dans le nucléaire pour assurer l'indépendance énergétique, même si cela retarde les énergies renouvelables ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q19" value="1"> ❌ Non, renouvelables prioritaires (+1)</label>
+                    <label class="option"><input type="radio" name="q19" value="-1"> ✅ Oui, solution la plus fiable (-1)</label>
+                    <label class="option"><input type="radio" name="q19" value="0"> ➖ Un mix des deux, selon les besoins (0)</label>
+                </div>
+            </div>
+            <div class="question">
+                <p><strong>d)</strong> Interdire les vols intérieurs en avion lorsque des alternatives en train existent (ex : Paris-Lyon) ?</p>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q20" value="1"> ✅ Oui, réduction des émissions (+1)</label>
+                    <label class="option"><input type="radio" name="q20" value="-1"> ❌ Non, liberté de mouvement (-1)</label>
+                    <label class="option"><input type="radio" name="q20" value="0"> ➖ Oui, mais avec des exceptions pour les urgences (0)</label>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="calculateScore()">Voir mon résultat !</button>
+    </div>
+
+    <div id="result">
+        <h2>Ton résultat : <span id="score-value"></span></h2>
+        <div class="score-bar">
+            <div class="score-fill" id="score-fill"></div>
+        </div>
+        <p id="score-description"></p>
+        <p class="party-examples" id="party-examples"></p>
+        <p class="explanation" id="explanation"></p>
+        <button onclick="window.location.reload()">Recommencer</button>
+    </div>
+
+    <script>
+        function calculateScore() {
+            let score = 0;
+            // Économie et fiscalité
+            score += parseInt(document.querySelector('input[name="q1"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q2"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q3"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q4"]:checked')?.value || 0);
+            // Société et valeurs
+            score += parseInt(document.querySelector('input[name="q5"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q6"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q7"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q8"]:checked')?.value || 0);
+            // Sécurité et justice
+            score += parseInt(document.querySelector('input[name="q9"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q10"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q11"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q12"]:checked')?.value || 0);
+            // Europe et international
+            score += parseInt(document.querySelector('input[name="q13"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q14"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q15"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q16"]:checked')?.value || 0);
+            // Environnement et technologie
+            score += parseInt(document.querySelector('input[name="q17"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q18"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q19"]:checked')?.value || 0);
+            score += parseInt(document.querySelector('input[name="q20"]:checked')?.value || 0);
+
+            // Afficher le résultat
+            document.getElementById('quiz').style.display = 'none';
+            const resultElement = document.getElementById('result');
+            const scoreValue = document.getElementById('score-value');
+            const scoreFill = document.getElementById('score-fill');
+            const scoreDescription = document.getElementById('score-description');
+            const partyExamples = document.getElementById('party-examples');
+            const explanation = document.getElementById('explanation');
+
+            scoreValue.textContent = score + "/20";
+            resultElement.style.display = 'block';
+
+            // Calcul du pourcentage pour la barre
+            const percentage = ((score + 20) / 40) * 100; // Convertir le score [-20, 20] en [0, 100]
+            scoreFill.style.width = percentage + '%';
+            scoreFill.style.background = `linear-gradient(90deg, #e74c3c 0%, #e74c3c ${50}%, #3498db ${50}%, #3498db 100%)`;
+            if (score >= 0) {
+                scoreFill.style.background = `linear-gradient(90deg, #e74c3c 0%, #e74c3c ${50}%, #3498db ${50}%, #3498db 100%)`;
+            } else {
+                scoreFill.style.background = `linear-gradient(90deg, #3498db 0%, #3498db ${50 + (score/40)*100}%, #e74c3c ${50 + (score/40)*100}%, #e74c3c 100%)`;
+            }
+
+            // Description du résultat
+            let description = "";
+            let parties = "";
+            let expl = "";
+
+            if (score >= 16) {
+                description = "Extrême gauche : Tu prônes une rupture radicale avec le système actuel, en faveur d'une société plus égalitaire et écologique.";
+                parties = "Partis proches : Lutte Ouvrière (LO), Nouveau Parti Anticapitaliste (NPA).";
+                expl = "Tu es probablement en faveur d'une transformation profonde de l'économie et de la société, avec une forte critique du capitalisme.";
+            } else if (score >= 10) {
+                description = "Gauche radicale : Tes idées rejoignent celles d'une gauche réformiste mais déterminée, avec des positions fortes sur la justice sociale et l'écologie.";
+                parties = "Partis proches : La France Insoumise (LFI), Parti Communiste (PCF).";
+                expl = "Tu soutiens des politiques de redistribution, de protection de l'environnement et de droits sociaux étendus.";
+            } else if (score >= 5) {
+                description = "Gauche modérée : Tu es plutôt social-démocrate, en faveur d'un État protecteur mais pragmatique.";
+                parties = "Partis proches : Parti Socialiste (PS), Europe Écologie Les Verts (EELV).";
+                expl = "Tu crois en un équilibre entre marché et intervention publique, avec une attention particulière à l'écologie et aux inégalités.";
+            } else if (score >= -1) {
+                description = "Centre : Tu es modéré·e, en faveur de compromis et de solutions pragmatiques.";
+                parties = "Partis proches : Renaissance (ex-LREM), Mouvement Démocrate (Modem).";
+                expl = "Tu privilégies des politiques équilibrées, ni trop à gauche ni trop à droite, avec une ouverture à l'innovation et au dialogue.";
+            } else if (score >= -6) {
+                description = "Droite classique : Tu défends des valeurs traditionnelles, la sécurité et une économie libérale encadrée.";
+                parties = "Partis proches : Les Républicains (LR).";
+                expl = "Tu es attaché·e à l'ordre, à la responsabilité individuelle et à une économie de marché, tout en soutenant un État fort sur les questions de sécurité.";
+            } else if (score >= -12) {
+                description = "Extrême droite : Tes positions sont souverainistes, avec une forte emphase sur l'identité nationale, la sécurité et le rejet de l'immigration.";
+                parties = "Partis proches : Rassemblement National (RN), Reconquête!";
+                expl = "Tu prônes un État fort, une réduction de l'immigration, et une méfiance envers les institutions européennes et internationales.";
+            } else {
+                description = "Extrême droite radicale : Tes idées rejoignent les mouvements les plus radicaux en faveur d'une rupture avec le système politique actuel.";
+                parties = "Partis/mouvements proches : Groupes identitaires, nationalistes radicaux.";
+                expl = "Tu soutiens probablement des politiques de fermetures des frontières, de sortie de l'UE, et d'un État autoritaire.";
+            }
+
+            scoreDescription.textContent = description;
+            partyExamples.textContent = parties;
+            explanation.textContent = expl;
+        }
+    </script>
+</body>
+</html>
