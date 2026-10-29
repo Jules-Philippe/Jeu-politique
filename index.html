@@ -551,7 +551,6 @@
             score += parseInt(document.querySelector('input[name="q25"]:checked')?.value || 0);
             score += parseInt(document.querySelector('input[name="q26"]:checked')?.value || 0);
             
-
             // Afficher le résultat
             document.getElementById('quiz').style.display = 'none';
             const resultElement = document.getElementById('result');
@@ -560,6 +559,8 @@
             const scoreDescription = document.getElementById('score-description');
             const partyExamples = document.getElementById('party-examples');
             const explanation = document.getElementById('explanation');
+
+            scoreValue.textContent = score + "/26";
 
             // Calcul du pourcentage pour la barre
             const percentage = ((score + 26) / 52) * 100; // Convertir le score [-20, 20] en [0, 100]
